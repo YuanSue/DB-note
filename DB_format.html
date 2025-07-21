@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>DB note</title>
+  
+  <!-- 字型與樣式 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      margin: 30px;
+      color: #222;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-size: 1.5em;
+      color: #975;
+      margin-top: 40px;
+    }
+
+    .under{
+      text-decoration: underline;
+      text-decoration-color: black;
+    }
+
+    .red-text {
+      font-weight: bold;
+      text-decoration-thickness: 2px;
+      color: red;
+    }
+
+    .blue-text {
+      font-weight: bold;
+      text-decoration-thickness: 2px;
+      color: rgb(105, 135, 190);
+    }
+
+    /* 表格樣式 */
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    code {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #f2f2f2;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    /* 程式碼框選格式 */
+    .code-block {
+      position: relative;
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 3px solid #000000;
+      font-family: 'Courier New', monospace;
+      line-height: 1.5;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .copy-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+
+    /* 索引面板樣式 */
+    .index-panel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .index-toggle {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .index-toggle:hover {
+      background-color: #0056b3;
+      transform: scale(1.1);
+    }
+
+    .index-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      padding: 15px;
+      min-width: 250px;
+      max-height: 400px;
+      overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      display: none;
+    }
+
+    .index-menu.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .index-item {
+      display: block;
+      text-decoration: none;
+      color: #333;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      transition: background-color 0.2s ease;
+    }
+
+    .index-item:hover {
+      background-color: #f0f8ff;
+      color: #007bff;
+    }
+
+    .index-title {
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 10px;
+      text-align: center;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 8px;
+    }
+
+    /*圖片置中*/
+    .center-img {
+    display: block;
+    margin: 0 auto;
+  }
+
+  </style>
+</head>
+<body>
+  <!-- 索引面板 -->
+  <div class="index-panel">
+    <button class="index-toggle" onclick="toggleIndex()">🔍</button>
+    <div class="index-menu" id="indexMenu">
+      <div class="index-title">頁面索引</div>
+      <a href="#section1" class="index-item">空與null的差異</a>
+      <a href="#section2" class="index-item">varchar 家族</a>
+      <a href="#section3" class="index-item">層級架構</a>
+    </div>
+  </div>
+
+  <h1><a href="index.html"> DB知識點</a></h1>
+  <!-- POINT -->
+  <h2 id="section1">空與null的差異</h2>
+  <!-- 表格開始 -->
+  <table>
+    <thead>
+      <tr>
+        <th>概念</th>
+        <th>空（Empty）</th>
+        <th>NULL（空值）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>意義</td>
+        <td>有值，但值是空的（例如空字串 ''）</td>
+        <td>沒有值，代表「未知」、「不存在」或「尚未填寫」</td>
+      </tr>
+      <tr>
+        <td>資料型別</td>
+        <td>多數出現在 文字欄位（如 VARCHAR）</td>
+        <td>可出現在任何型別欄位（文字、數字、日期等）</td>
+      </tr>
+      <tr>
+        <td>可見性</td>
+        <td>你會看到空白或空字串（""）</td>
+        <td>通常顯示為 NULL 或直接顯示為空</td>
+      </tr>
+      <tr>
+        <td>比較運算</td>
+        <td>'' = '' 為真</td>
+        <td>NULL = NULL 為 未知（不是 true）</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- 表格結束 -->
+
+  <p><span class="blue-text">比喻的話:空為空的紙捲筒，則null為完全沒有任何東西 </span> </p>
+
+  <!-- varchar 家族 -->
+  <h2 id="section2">varchar 家族</h2>
+  <!-- 表格開始 -->
+  <table border="1" cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>VARCHAR</th>
+          <th>NVARCHAR</th>
+          <th>VARCHAR2</th>
+          <th>NVARCHAR2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>用途</td>
+          <td>儲存英文或單語系文字（可變長度）</td>
+          <td>儲存 Unicode 多語系文字（可變長度）</td>
+          <td>Oracle 專用的可變長度字串</td>
+          <td>Oracle 專用的 Unicode 多語系字串</td>
+        </tr>
+        <tr>
+          <td>支援語言</td>
+          <td>單一語言（依字元集，預設不支援 Unicode）</td>
+          <td>多語言（支援 Unicode，例如中文、日文、韓文等）</td>
+          <td>單一語言（依字元集，部分支援 Unicode）</td>
+          <td>多語言（完整支援 Unicode）</td>
+        </tr>
+        <tr>
+          <td>儲存方式</td>
+          <td>單字元通常 1 byte，實際字數 + 長度資訊</td>
+          <td>每個字元使用 2 bytes（UTF-16）</td>
+          <td>與 VARCHAR 類似，但更安全可靠</td>
+          <td>每個字元使用 2 bytes（UTF-16）</td>
+        </tr>
+        <tr>
+          <td>用在資料庫</td>
+          <td>MySQL、SQL Server、PostgreSQL 等</td>
+          <td>SQL Server、Sybase（用 N'字串' 表示）</td>
+          <td>Oracle 專用</td>
+          <td>Oracle 專用</td>
+        </tr>
+        <tr>
+          <td>限制</td>
+          <td>不支援完整 Unicode，多語系顯示可能出錯</td>
+          <td>需搭配 N'字串' 使用，空間佔用較多</td>
+          <td>只有 Oracle 支援，VARCHAR 已被 Oracle 保留</td>
+          <td>只能在 Oracle 使用，空間佔用較多，處理速度稍慢</td>
+        </tr>
+      </tbody>
+    </table>
+        <!-- 表格結束 -->
+
+  <h2 id="section3">層級架構</h2>
+    <p>DB 三要素: <span class="red-text">CPU、storage、memories</span></p>
+    <p>概念層級<br>
+      Oracle Database<br>
+      ├── <span class="blue-text">Table spaces（邏輯儲存區）</span> <br>
+      │       ├── Datafiles（實體檔案）<br>
+      │       └── Segments（資料物件的儲存單位）<br>
+      │           ├── Table Segment（資料表儲存）<br>
+      │           ├── Index Segment（索引儲存）<br>
+      │           └── LOB/Temp Segment（大物件/暫存等）<br>
+      │               └── <span class="blue-text">Extents（一段段空間）</span> <br>
+      │                   └── Blocks（實體儲存單位）<br>
+      │<br>
+      ├── Schema Objects（結構物件）<br>
+      │       ├── <span class="blue-text">Tables（實體表）</span><br>
+      │       ├── <span class="blue-text">Indexes（索引）</span>→ 有儲存空間<br>
+      │       ├── <span class="blue-text">Views（檢視表）</span>→ 無儲存空間（查詢定義）<br>
+      │       ├── Synonyms / Sequences / Procedures 等<br>
+      │<br>
+      └── <span class="blue-text">Partition</span>（表或索引的邏輯分割，可跨 tablespace）<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;└── 各 Partition 存在於不同 Segment 或 Tablespace<br>
+    </p>
+
+  <h3>Table space（表空間）</h3>
+  <p> 是資料庫管理系統（如 Oracle、PostgreSQL、DB2 等）中用來
+    <span class="red-text">管理資料儲存空間的邏輯結構</span>。(邏輯儲存單位)
+    簡單來說，它是資料庫裡用來儲存表格（tables）、索引（indexes）等資料物件的容器。
+    一個大型資料庫可能會有成千上萬筆資料，如果都存在單一的物理檔案中，不僅難以管理，也不利於效能優化。透過表空間，我們可以：
+    <span class="under">將資料依類型、用途或部門分區儲存</span>、
+    <span class="under">把資料分散到不同的磁碟，提高存取效率</span>、
+    <span class="under">管理備份與還原更有彈性</span>
+    </p>
+  <p> 簡單類比:
+    可以把 Table Space 想成一個「檔案櫃」，裡面有好幾個「抽屜」（data files），
+    使用者（或資料庫系統）把各種文件（表格、索引）放到不同的抽屜裡，依照使用情況做分類、整理、備份。
+    </p>
+  <p>分table space的好處:</p><br>
+  <!--table start-->
+  <table border="1" cellspacing="0" cellpadding="8">
+  <thead>
+    <tr>
+      <th>分類</th>
+      <th>說明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>⚙️ <strong>效能優化</strong></td>
+      <td>
+        - 可將不同類型資料分散到不同磁碟上（I/O 負載平衡）<br>
+        - 熱資料與冷資料分離，提高讀寫效率
+      </td>
+    </tr>
+    <tr>
+      <td>🔧 <strong>管理方便</strong></td>
+      <td>
+        - 可獨立管理空間（大小、是否自動擴充）<br>
+        - 個別備份/還原某個 tablespace 更快速且有彈性
+      </td>
+    </tr>
+    <tr>
+      <td>🔒 <strong>安全控管</strong></td>
+      <td>
+        - 使用者可以被限制只能在指定 tablespace 建立資料表<br>
+        - 資料分類儲存可搭配不同權限策略
+      </td>
+    </tr>
+    <tr>
+      <td>📦 <strong>資料分區/分類</strong></td>
+      <td>
+        - 系統資料（如索引、temp）、應用資料、歷史資料可以分類存在不同的 tablespace 內
+      </td>
+    </tr>
+    <tr>
+      <td>📈 <strong>擴充彈性</strong></td>
+      <td>
+        - 某個 tablespace 空間不足時可單獨擴充，不影響整體系統運作
+      </td>
+    </tr>
+    <tr>
+      <td>🚨 <strong>故障隔離</strong></td>
+      <td>
+        - 某個 tablespace 損毀時，只影響那一區資料（如 temp tablespace 損壞，不影響用戶資料）
+      </td>
+    </tr>
+    <tr>
+      <td>🔍 <strong>查詢調優</strong></td>
+      <td>
+        - 在 SQL 中指定表空間可幫助某些優化策略或排除問題
+      </td>
+    </tr>
+  </tbody>
+</table>
+  <!--table end-->
+  <h3>Extent（範圍）:</h3>
+  <p>-是 Oracle 中 儲存資料的基本分配單位，一個 extent 是連續的資料塊（block）集合。<br>
+     -當資料表或索引需要更多空間時，Oracle 就會分配新的 extent 給它。</p>
+
+  <h3>Index & Partition</h3>
+  <p>Index（索引） 和 Partition（分割） 都與<span class="red-text">提升查詢效能，進而節省時間</span>
+    ，但它們的目的、作用方式和儲存結構完全不同。以下為差異表:</p> <br>
+  <p><span class="blue-text">Index</span>:是輔助結構（加快查詢，不改變資料本體）<br>
+    -像書本的目錄：快速找到某個主題在哪一頁。也類似lable一樣標示<br>
+    -索引根據欄位值排序並記錄對應的資料位置（ROWID）。<br>
+    -當查詢有 WHERE, JOIN, ORDER BY 時，可大量減少資料掃描量。<br>
+    <span class="blue-text">Partition</span>:是資料表的邏輯切割（改變儲存架構）<br>
+    -把<code>一張大表切成多個小表（分區）</code>來儲存。各區錯開<br>
+    -各 partition 可放在不同 tablespace，可獨立備份、刪除、查詢。<br>
+    -查詢可自動只掃描需要的 partition（提高效能與管理效率）。
+  </p>
+  <!--table start-->
+  <table border="1" cellspacing="0" cellpadding="8">
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th><strong>Index（索引）</strong></th>
+      <th><strong>Partition（分割）</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>📌 <strong>定義</strong></td>
+      <td>加速查詢的輔助資料結構，類似書的目錄</td>
+      <td>把大表（或索引）依條件邏輯切割成多個子資料區塊</td>
+    </tr>
+    <tr>
+      <td>📁 <strong>是否實體儲存</strong></td>
+      <td>✅ 是，有實體儲存空間（存在 segment）</td>
+      <td>✅ 是，每個 partition 有自己的 segment</td>
+    </tr>
+    <tr>
+      <td>🧱 <strong>作用對象</strong></td>
+      <td>Table 或 View 上建立（可針對欄位）</td>
+      <td>主要用在 Table 或 Index（表或索引可被分割）</td>
+    </tr>
+    <tr>
+      <td>⚙️ <strong>主要目的</strong></td>
+      <td>加速查詢、排序、條件搜尋（尤其是 WHERE 子句）</td>
+      <td>提升查詢效率、易於管理大量資料（區塊化）</td>
+    </tr>
+    <tr>
+      <td>🔍 <strong>查詢時的行為</strong></td>
+      <td>快速找到符合條件的列位置（ROWID）</td>
+      <td>可以只掃描相關的 partition（稱為 partition pruning）</td>
+    </tr>
+    <tr>
+      <td>📊 <strong>常見類型</strong></td>
+      <td>B-tree、Bitmap、Function-based 等</td>
+      <td>Range, List, Hash, Composite 等</td>
+    </tr>
+    <tr>
+      <td>🔧 <strong>建構範例</strong></td>
+      <td><code>CREATE INDEX idx_emp ON emp(emp_id);</code></td>
+      <td><code>PARTITION BY RANGE (date)</code></td>
+    </tr>
+    <tr>
+      <td>🎯 <strong>可否合併使用</strong></td>
+      <td>✅ 可以（稱為 <strong>Partitioned Index</strong>）</td>
+      <td>✅ 可以與索引結合使用</td>
+    </tr>
+  </tbody>
+</table>
+  <!--table end-->  
+
+  <script>
+    function copyCode(button) {
+      // 找到按鈕所在的程式碼區塊
+      const codeBlock = button.parentElement;
+      // 找到程式碼內容元素
+      const codeContent = codeBlock.querySelector('.code-content');
+      
+      if (codeContent) {
+        navigator.clipboard.writeText(codeContent.textContent).then(() => {
+          alert("已複製 SQL 程式碼！");
+        });
+      }
+    }
+
+    function toggleIndex() {
+      const indexMenu = document.getElementById('indexMenu');
+      indexMenu.classList.toggle('show');
+    }
+
+    // 點擊其他地方時關閉索引面板
+    document.addEventListener('click', function(event) {
+      const indexPanel = document.querySelector('.index-panel');
+      const indexMenu = document.getElementById('indexMenu');
+      
+      if (!indexPanel.contains(event.target)) {
+        indexMenu.classList.remove('show');
+      }
+    });
+
+    // 點擊索引項目後關閉面板並平滑滾動
+    document.querySelectorAll('.index-item').forEach(item => {
+      item.addEventListener('click', function(event) {
+        event.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+        
+        // 關閉索引面板
+        document.getElementById('indexMenu').classList.remove('show');
+      });
+    });
+  </script>
+
+ <a href="index.html">← 回首頁</a>
+</body>
+</html>
