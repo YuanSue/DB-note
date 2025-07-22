@@ -186,6 +186,28 @@
     display: block;
     margin: 0 auto;
   }
+  /*樹狀圖調整樣式*/
+  .tree-block {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      background-color: #f9f9f9;
+      color: #333;
+      border-left: 4px solid #4e73df;
+      padding: 12px 16px;
+      margin: 16px 0;
+      white-space: pre;
+      line-height: 1.6;
+      tab-size: 4; /* 支援 tab 縮排 */
+    }
+
+    .tree-block .blue-text {
+      color: #007acc;
+      font-weight: bold;
+    }
+
+    .tree-block .gray-text {
+      color: #888;
+    }
 
   </style>
 </head>
@@ -295,41 +317,44 @@
 
   <h2 id="section3">層級架構</h2>
     <p>DB 三要素: <span class="red-text">CPU、storage、memories</span></p>
-    <pre>概念層級<br>
-      Oracle Database<br>
-      ├── <span class="blue-text">Table spaces（邏輯儲存區）</span> <br>
-      │   &nbsp;├── Datafiles（實體檔案）<br>
-      │   &nbsp;└── Segments（資料物件的儲存單位）<br>
-      │   &nbsp;&nbsp;    ├── Table Segment（資料表儲存）<br>
-      │   &nbsp;&nbsp;    ├── Index Segment（索引儲存）<br>
-      │   &nbsp;&nbsp;    └── LOB/Temp Segment（大物件/暫存等）<br>
-      │   &nbsp;&nbsp;        └── <span class="blue-text">Extents（一段段空間）</span> <br>
-      │   &nbsp;&nbsp;&nbsp;            └── Blocks（實體儲存單位）<br>
-      │<br>
-      ├── Schema Objects（結構物件）<br>
-      │   &nbsp;├── <span class="blue-text">Tables（實體表）</span><br>
-      │   &nbsp;├── <span class="blue-text">Indexes（索引）</span>→ 有儲存空間<br>
-      │   &nbsp;├── <span class="blue-text">Views（檢視表）</span>→ 無儲存空間（查詢定義）<br>
-      │   &nbsp;└──  Synonyms / Sequences / Procedures 等<br>
-      │<br>
-      └── <span class="blue-text">Partition</span>（表或索引的邏輯分割，可跨 tablespace）<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;└── 各 Partition 存在於不同 Segment 或 Tablespace<br>
+    <p>概念層級</p>
+    <pre class="tree-block">
+      Oracle Database
+      ├── <span class="blue-text">Table spaces（邏輯儲存區）</span> 
+      │   &nbsp;├── Datafiles（實體檔案）
+      │   &nbsp;└── Segments（資料物件的儲存單位）
+      │   &nbsp;&nbsp;    ├── Table Segment（資料表儲存）
+      │   &nbsp;&nbsp;    ├── Index Segment（索引儲存）
+      │   &nbsp;&nbsp;    └── LOB/Temp Segment（大物件/暫存等）
+      │   &nbsp;&nbsp;        └── <span class="blue-text">Extents（一段段空間）</span> 
+      │   &nbsp;&nbsp;&nbsp;            └── Blocks（實體儲存單位）
+      │
+      ├── Schema Objects（結構物件）
+      │   &nbsp;├── <span class="blue-text">Tables（實體表）</span>
+      │   &nbsp;├── <span class="blue-text">Indexes（索引）</span>→ 有儲存空間
+      │   &nbsp;├── <span class="blue-text">Views（檢視表）</span>→ 無儲存空間（查詢定義）
+      │   &nbsp;└──  Synonyms / Sequences / Procedures 等
+      │
+      └── <span class="blue-text">Partition</span>（表或索引的邏輯分割，可跨 tablespace）
+      &nbsp;&nbsp;&nbsp;&nbsp;└── 各 Partition 存在於不同 Segment 或 Tablespace
     </pre>
 
   <h3>Table space（表空間）</h3>
   <p> 是資料庫管理系統（如 Oracle、PostgreSQL、DB2 等）中用來
     <span class="red-text">管理資料儲存空間的邏輯結構</span>。(邏輯儲存單位)
-    簡單來說，它是資料庫裡用來儲存表格（tables）、索引（indexes）等資料物件的容器。
-    一個大型資料庫可能會有成千上萬筆資料，如果都存在單一的物理檔案中，不僅難以管理，也不利於效能優化。透過表空間，我們可以：
-    <span class="under">將資料依類型、用途或部門分區儲存</span>、
-    <span class="under">把資料分散到不同的磁碟，提高存取效率</span>、
-    <span class="under">管理備份與還原更有彈性</span>
+    簡單來說，它是資料庫裡用來儲存表格（tables）、索引（indexes）等資料物件的容器。<br>
+    一個大型資料庫可能會有成千上萬筆資料，如果都存在單一的物理檔案中，不僅難以管理，也不利於效能優化。<br>透過表空間，我們可以：
+    1.<span class="under">將資料依類型、用途或部門分區儲存</span><br>
+    2.<span class="under">把資料分散到不同的磁碟，提高存取效率</span><br>
+    3.<span class="under">管理備份與還原更有彈性</span>
     </p>
   <p> 簡單類比:
     可以把 Table Space 想成一個「檔案櫃」，裡面有好幾個「抽屜」（data files），
     使用者（或資料庫系統）把各種文件（表格、索引）放到不同的抽屜裡，依照使用情況做分類、整理、備份。
+    <br>如圖:
     </p>
-  <p>分table space的好處:</p><br>
+  <img src="img/table_space.png" alt="無法顯示" width="500" class="center-img">
+  <p>分table space的好處:</p>
   <!--table start-->
   <table border="1" cellspacing="0" cellpadding="8">
   <thead>
@@ -389,16 +414,17 @@
   <!--table end-->
   <h3>Extent（範圍）:</h3>
   <p>-是 Oracle 中 儲存資料的基本分配單位，一個 extent 是連續的資料塊（block）集合。<br>
-     -當資料表或索引需要更多空間時，Oracle 就會分配新的 extent 給它。</p>
+     -當資料表或索引需要更多空間時，Oracle 就會分配新的 extent 給它。<br>如圖:</p>
+    <img src="img/extent.png" alt="無法顯示" width="500" class="center-img">
 
   <h3>Index & Partition</h3>
   <p>Index（索引） 和 Partition（分割） 都與<span class="red-text">提升查詢效能，進而節省時間</span>
-    ，但它們的目的、作用方式和儲存結構完全不同。以下為差異表:</p> <br>
+    ，但它們的目的、作用方式和儲存結構完全不同。以下為差異表:</p>
   <p><span class="blue-text">Index</span>:是輔助結構（加快查詢，不改變資料本體）<br>
     -像書本的目錄：快速找到某個主題在哪一頁。也類似lable一樣標示<br>
     -索引根據欄位值排序並記錄對應的資料位置（ROWID）。<br>
-    -當查詢有 WHERE, JOIN, ORDER BY 時，可大量減少資料掃描量。<br>
-    <span class="blue-text">Partition</span>:是資料表的邏輯切割（改變儲存架構）<br>
+    -當查詢有 WHERE, JOIN, ORDER BY 時，可大量減少資料掃描量。</p>
+  <p><span class="blue-text">Partition</span>:是資料表的邏輯切割（改變儲存架構）<br>
     -把<code>一張大表切成多個小表（分區）</code>來儲存。各區錯開<br>
     -各 partition 可放在不同 tablespace，可獨立備份、刪除、查詢。<br>
     -查詢可自動只掃描需要的 partition（提高效能與管理效率）。
