@@ -298,19 +298,19 @@
     <p>概念層級<br>
       Oracle Database<br>
       ├── <span class="blue-text">Table spaces（邏輯儲存區）</span> <br>
-      │       ├── Datafiles（實體檔案）<br>
-      │       └── Segments（資料物件的儲存單位）<br>
-      │           ├── Table Segment（資料表儲存）<br>
-      │           ├── Index Segment（索引儲存）<br>
-      │           └── LOB/Temp Segment（大物件/暫存等）<br>
-      │               └── <span class="blue-text">Extents（一段段空間）</span> <br>
-      │                   └── Blocks（實體儲存單位）<br>
+      │   &nbsp;├── Datafiles（實體檔案）<br>
+      │   &nbsp;└── Segments（資料物件的儲存單位）<br>
+      │   &nbsp;&nbsp;    ├── Table Segment（資料表儲存）<br>
+      │   &nbsp;&nbsp;    ├── Index Segment（索引儲存）<br>
+      │   &nbsp;&nbsp;    └── LOB/Temp Segment（大物件/暫存等）<br>
+      │   &nbsp;&nbsp;        └── <span class="blue-text">Extents（一段段空間）</span> <br>
+      │   &nbsp;&nbsp;&nbsp;            └── Blocks（實體儲存單位）<br>
       │<br>
       ├── Schema Objects（結構物件）<br>
-      │       ├── <span class="blue-text">Tables（實體表）</span><br>
-      │       ├── <span class="blue-text">Indexes（索引）</span>→ 有儲存空間<br>
-      │       ├── <span class="blue-text">Views（檢視表）</span>→ 無儲存空間（查詢定義）<br>
-      │       ├── Synonyms / Sequences / Procedures 等<br>
+      │   &nbsp;├── <span class="blue-text">Tables（實體表）</span><br>
+      │   &nbsp;├── <span class="blue-text">Indexes（索引）</span>→ 有儲存空間<br>
+      │   &nbsp;├── <span class="blue-text">Views（檢視表）</span>→ 無儲存空間（查詢定義）<br>
+      │   &nbsp;└──  Synonyms / Sequences / Procedures 等<br>
       │<br>
       └── <span class="blue-text">Partition</span>（表或索引的邏輯分割，可跨 tablespace）<br>
       &nbsp;&nbsp;&nbsp;&nbsp;└── 各 Partition 存在於不同 Segment 或 Tablespace<br>
