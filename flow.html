@@ -228,11 +228,11 @@
     <p>在Data Migration中，會有一套處理資料的流程，以下為常用流程:</p>
     <img src="img/flow.png" alt="無法顯示" width="500" class="center-img">
     <p>各節點介紹:</p>
-    <p><span class="blue-text">Source</span>:<br>為資料源，由於資料源可能為一個或多個，所以在這個階段是<span class="under">先蒐集資料</span>再給下個stage進行整理
-       <span class="blue-text">Stage(STG)</span>:<br>可以定義其他名字，如:DF(Data file)，在這個階段中會<span class="under">先定義欄位型態、名稱、size...etc，統一格式</span>再進行轉移
-       <span class="blue-text">ODS</span>:<br>在資料倉儲與資料遷移（Data Migration）的架構中，ODS（Operational Data Store） 是一個<span class="under">臨時性或中繼性的資料層</span>，用來<span class="under">整合、清理</span>來源系統的營運資料。
-       <span class="blue-text">AC</span>:<br>可以定義其他名字，命名通常以客戶為主，主要是放資料源的raw data(一般會在這裡append資料)
-       <span class="blue-text">DM</span>:<br>Data Mart，在stage層整理過後產出的tables
+    <p><span class="blue-text">Source</span>:<br>為資料源，由於資料源可能為一個或多個，所以在這個階段是<span class="under">先蒐集資料</span>再給下個stage進行整理<br>
+       <span class="blue-text">Stage(STG)</span>:<br>可以定義其他名字，如:DF(Data file)，在這個階段中會<span class="under">先定義欄位型態、名稱、size...etc，統一格式</span>再進行轉移<br>
+       <span class="blue-text">ODS</span>:<br>在資料倉儲與資料遷移（Data Migration）的架構中，ODS（Operational Data Store） 是一個<span class="under">臨時性或中繼性的資料層</span>，用來<span class="under">整合、清理</span>來源系統的營運資料。<br>
+       <span class="blue-text">AC</span>:<br>可以定義其他名字，命名通常以客戶為主，主要是放資料源的raw data(一般會在這裡append資料)<br>
+       <span class="blue-text">DM</span>:<br>Data Mart，在stage層整理過後產出的tables<br>
        Note: 一般在STG及AC的資料存活時間較短(1天)；在ODS的資料存活時間較長(1個月)
     </p>
     <h2 id="section1">Data Warehouse</h2>
