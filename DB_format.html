@@ -295,7 +295,7 @@
 
   <h2 id="section3">層級架構</h2>
     <p>DB 三要素: <span class="red-text">CPU、storage、memories</span></p>
-    <p>概念層級<br>
+    <pre>概念層級<br>
       Oracle Database<br>
       ├── <span class="blue-text">Table spaces（邏輯儲存區）</span> <br>
       │   &nbsp;├── Datafiles（實體檔案）<br>
@@ -314,7 +314,7 @@
       │<br>
       └── <span class="blue-text">Partition</span>（表或索引的邏輯分割，可跨 tablespace）<br>
       &nbsp;&nbsp;&nbsp;&nbsp;└── 各 Partition 存在於不同 Segment 或 Tablespace<br>
-    </p>
+    </pre>
 
   <h3>Table space（表空間）</h3>
   <p> 是資料庫管理系統（如 Oracle、PostgreSQL、DB2 等）中用來
