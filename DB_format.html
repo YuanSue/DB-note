@@ -418,6 +418,7 @@
     <img src="img/extent.png" alt="無法顯示" width="500" class="center-img">
 
   <h3>Index & Partition</h3>
+  <p>若有超大比數(10億)的資料:可用Index or Partition架構</p>
   <p>Index（索引） 和 Partition（分割） 都與<span class="red-text">提升查詢效能，進而節省時間</span>
     ，但它們的目的、作用方式和儲存結構完全不同。以下為差異表:</p>
   <p><span class="blue-text">Index</span>:是輔助結構（加快查詢，不改變資料本體）<br>
@@ -482,6 +483,58 @@
   </tbody>
 </table>
   <!--table end-->  
+  
+  <h3>Table Space vs Partition</h3>
+  <p><span class="red-text">Table Space 是存放資料的位置，而 Partition 是切分資料的方式。
+    兩者可以結合來最佳化大型資料表的儲存與查詢效能。</span></p>
+  <!--table start-->
+  <table border="1" cellspacing="0" cellpadding="6">
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>Table Space（表空間）</th>
+      <th>Partition（分割區）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>概念層級</td>
+      <td>資料庫儲存管理層（邏輯磁碟空間）</td>
+      <td>資料表的資料切分層（邏輯資料分區）</td>
+    </tr>
+    <tr>
+      <td>主要用途</td>
+      <td>管理資料實體存放位置</td>
+      <td>管理單一表中的大資料量</td>
+    </tr>
+    <tr>
+      <td>對象</td>
+      <td>可包含多張表與索引</td>
+      <td>針對單一表或索引進行切割</td>
+    </tr>
+    <tr>
+      <td>對應的實體</td>
+      <td>對應一或多個磁碟檔案</td>
+      <td>每個分割區為一個 segment（實體物件）</td>
+    </tr>
+    <tr>
+      <td>是否可分表儲存</td>
+      <td>是，透過指派不同表空間</td>
+      <td>是，每個 partition 可指定不同表空間（選擇性）</td>
+    </tr>
+    <tr>
+      <td>性能優化</td>
+      <td>控制磁碟I/O、分開讀寫</td>
+      <td>節省查詢成本，提升 SELECT / DELETE 效率</td>
+    </tr>
+    <tr>
+      <td>常見使用情境</td>
+      <td>按部門、歷史、資料類型儲存</td>
+      <td>時間分區、地區分區、大表分區</td>
+    </tr>
+  </tbody>
+</table>
+  <!--table end-->
 
   <script>
     function copyCode(button) {
