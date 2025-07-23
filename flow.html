@@ -370,6 +370,44 @@
     </table>
     <!--table end-->
 
+    <h3>MPP</h3>
+    <p>Massively Parallel Processing，為大規模平行處理架構。是一種資料庫或處理系統架構，透過<span class="under">多個節點並行處理資料</span>，以達成高速查詢與資料分析的效果。<br>
+    如圖所示:CPU連接儲存單元，表示<span class="under">每個 CPU 各自處理與儲存資料 → MPP 架構</span></p>
+        <img src="img/MPP.png" alt="無法顯示" width="500" class="center-img">
+    <!--table start-->
+    <table  border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>特性</th>
+      <th>說明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>架構</td>
+      <td>有多個 CPU / 節點，各自處理資料的子集</td>
+    </tr>
+    <tr>
+      <td>並行處理</td>
+      <td>查詢會切成多段，分派給不同節點平行執行</td>
+    </tr>
+    <tr>
+      <td>節點內資料獨立</td>
+      <td>各節點擁有自己的儲存與計算資源（非共用記憶體）</td>
+    </tr>
+    <tr>
+      <td>容錯性高</td>
+      <td>一個節點壞了不會癱瘓整個系統</td>
+    </tr>
+    <tr>
+      <td>常見代表工具</td>
+      <td>Teradata、Amazon Redshift、Greenplum、Snowflake、Azure Synapse</td>
+    </tr>
+    </tbody>
+    </table>
+    <!--table end-->
+ 
+
     <script>
     function copyCode(button) {
       // 找到按鈕所在的程式碼區塊
