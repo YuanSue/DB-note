@@ -238,13 +238,15 @@
     <h2 id="section2">Data Warehouse</h2>
     <img src="img/DW.png" alt="無法顯示" width="500" class="center-img">
         <h3>架構介紹</h3>
-    <p>先在各種不同的AP蒐集Data source，再經過ETL(Extract、Transform、Load)處理到Data Warehouse， </p>
+    <p>先在各種不同的AP中蒐集Data source，再經過ETL(Extract、Transform、Load)處理到Data Warehouse，分析客戶的商業邏輯轉成各個不同的DM，最後再產成報表。<br>point: Transform => Glue data</p>
         <h3>名詞解釋</h3>
-    <p><span class="blue-text">AP</span>:<br>為Application / 應用系統，代表這些是資料來源系統</p>
+    <p><span class="blue-text">AP</span>:<br>為Application / 應用系統，代表這些是資料來源系統，包括:交易系統、人力資源系統、超市系統…等 OLTP 系統（線上交易處理系統）</p>
     <p><span class="blue-text">Data Warehouse</span>:<br>
         是一種用於<span class="under">整合、儲存和分析</span>來自多個來源的大量資料的系統，也可以把Data Warehouse視為一個超大型DB。 </p>
+
     <p><span class="blue-text">OLTP</span>:<br>
     Online Transaction Processing，處理大量日常交易與業務操作，注重即時性與資料一致性。OLTP 系統像是：「處理前台買賣」<br>
+    在提取資料時需要快速且有條理，所以會有正規化的處理<br>
     💡關鍵詞：<span class="red-text">交易為主、更新快、資料庫正規化、效能佳、即時</span></p>
     <!--table start-->
     <table border="1" cellpadding="8" cellspacing="0">
@@ -285,6 +287,7 @@
 
     <p><span class="blue-text">OLAP</span>:<br>
     Online Analytical Processing，進行歷史資料的分析與查詢，支援決策分析。OLAP 系統像是：「分析後台營收趨勢」<br>
+    由於分析上要切換各個不同的報表程序會過於繁瑣，所以有時會有反正規化的處理<br>
     💡關鍵詞：<span class="red-text">分析為主、查詢多、歷史資料、反正規化、多維分析（Cube）</span></p>
     <!--table start-->
     <table border="1" cellpadding="8" cellspacing="0">
