@@ -236,7 +236,7 @@
     </p>
 
     <h2 id="section2">Data Warehouse</h2>
-    <img src="img/DW.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/DW.png" alt="無法顯示" width="700" class="center-img">
         <h3>架構介紹</h3>
     <p>先在各種不同的AP中蒐集Data source，再經過ETL(Extract、Transform、Load)處理到Data Warehouse，分析客戶的商業邏輯轉成各個不同的DM，最後再產成報表。<br>point: Transform => Glue data</p>
         <h3>名詞解釋</h3>
@@ -259,27 +259,27 @@
   <tbody>
     <tr>
       <td>操作類型</td>
-      <td>查詢（SELECT），尤其是聚合（SUM, AVG, COUNT）</td>
+      <td>插入（Insert）、更新（Update）、刪除（Delete）</td>
     </tr>
     <tr>
       <td>資料量</td>
-      <td>巨量歷史資料（TB 級甚至更多）</td>
+      <td>單筆、多筆交易（記錄數量多，但單筆很小）</td>
     </tr>
     <tr>
       <td>效能要求</td>
-      <td>複雜查詢與多維分析需優化，但非即時性</td>
+      <td>高頻率操作、即時回應（低延遲）</td>
     </tr>
     <tr>
       <td>資料庫設計</td>
-      <td>維度建模（Star Schema、Snowflake），常做反正規化</td>
+      <td>正規化（Normalization）以避免重複資料</td>
     </tr>
     <tr>
       <td>使用者類型</td>
-      <td>分析師、管理層、BI 報表使用者</td>
+      <td>一線業務人員、前端應用</td>
     </tr>
     <tr>
       <td>例子</td>
-      <td>月營收報表、年度趨勢分析、行銷洞察</td>
+      <td>ATM 提款、超商 POS 交易、訂單系統、會員登入</td>
     </tr>
   </tbody>
 </table>
