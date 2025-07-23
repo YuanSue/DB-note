@@ -234,7 +234,138 @@
        <span class="blue-text">DM</span>:<br>Data Mart，在stage層整理過後產出的tables<br>
        Note: 一般在STG及AC的資料存活時間較短(1天)；在ODS的資料存活時間較長(1個月)
     </p>
-    <h2 id="section1">Data Warehouse</h2>
+
+    <h2 id="section2">Data Warehouse</h2>
+    <img src="img/DW.png" alt="無法顯示" width="500" class="center-img">
+        <h3>架構介紹</h3>
+    <p>先在各種不同的AP蒐集Data source，再經過ETL(Extract、Transform、Load)處理到Data Warehouse， </p>
+        <h3>名詞解釋</h3>
+    <p><span class="blue-text">AP</span>:<br>為Application / 應用系統，代表這些是資料來源系統</p>
+    <p><span class="blue-text">Data Warehouse</span>:<br>
+        是一種用於<span class="under">整合、儲存和分析</span>來自多個來源的大量資料的系統，也可以把Data Warehouse視為一個超大型DB。 </p>
+    <p><span class="blue-text">OLTP</span>:<br>
+    Online Transaction Processing，處理大量日常交易與業務操作，注重即時性與資料一致性。OLTP 系統像是：「處理前台買賣」<br>
+    💡關鍵詞：<span class="red-text">交易為主、更新快、資料庫正規化、效能佳、即時</span></p>
+    <!--table start-->
+    <table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>說明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>操作類型</td>
+      <td>查詢（SELECT），尤其是聚合（SUM, AVG, COUNT）</td>
+    </tr>
+    <tr>
+      <td>資料量</td>
+      <td>巨量歷史資料（TB 級甚至更多）</td>
+    </tr>
+    <tr>
+      <td>效能要求</td>
+      <td>複雜查詢與多維分析需優化，但非即時性</td>
+    </tr>
+    <tr>
+      <td>資料庫設計</td>
+      <td>維度建模（Star Schema、Snowflake），常做反正規化</td>
+    </tr>
+    <tr>
+      <td>使用者類型</td>
+      <td>分析師、管理層、BI 報表使用者</td>
+    </tr>
+    <tr>
+      <td>例子</td>
+      <td>月營收報表、年度趨勢分析、行銷洞察</td>
+    </tr>
+  </tbody>
+</table>
+<!--table end-->
+
+    <p><span class="blue-text">OLAP</span>:<br>
+    Online Analytical Processing，進行歷史資料的分析與查詢，支援決策分析。OLAP 系統像是：「分析後台營收趨勢」<br>
+    💡關鍵詞：<span class="red-text">分析為主、查詢多、歷史資料、反正規化、多維分析（Cube）</span></p>
+    <!--table start-->
+    <table border="1" cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>操作類型</td>
+          <td>查詢（SELECT），尤其是聚合（SUM, AVG, COUNT）</td>
+        </tr>
+        <tr>
+          <td>資料量</td>
+          <td>巨量歷史資料（TB 級甚至更多）</td>
+        </tr>
+        <tr>
+          <td>效能要求</td>
+          <td>複雜查詢與多維分析需優化，但非即時性</td>
+        </tr>
+        <tr>
+          <td>資料庫設計</td>
+          <td>維度建模（Star Schema、Snowflake），常做反正規化</td>
+        </tr>
+        <tr>
+          <td>使用者類型</td>
+          <td>分析師、管理層、BI 報表使用者</td>
+        </tr>
+        <tr>
+          <td>例子</td>
+          <td>月營收報表、年度趨勢分析、行銷洞察</td>
+        </tr>
+      </tbody>
+    </table>
+    <!--table end-->
+    <!--table start-->
+    <p>🔄 比較表：</p>
+    <table border="1" cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>分類</th>
+          <th>OLTP</th>
+          <th>OLAP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>主要用途</td>
+          <td>線上交易處理</td>
+          <td>決策支援與資料分析</td>
+        </tr>
+        <tr>
+          <td>操作</td>
+          <td>CRUD 操作（新增、刪除、修改）</td>
+          <td>複雜查詢（聚合、切片、轉置）</td>
+        </tr>
+        <tr>
+          <td>資料庫設計</td>
+          <td>正規化（避免重複）</td>
+          <td>反正規化（查詢快）</td>
+        </tr>
+        <tr>
+          <td>使用者</td>
+          <td>一般使用者、業務系統</td>
+          <td>分析師、管理決策者</td>
+        </tr>
+        <tr>
+          <td>資料量</td>
+          <td>單筆交易、大量紀錄</td>
+          <td>歷史資料、彙總資料</td>
+        </tr>
+        <tr>
+          <td>查詢時間</td>
+          <td>極短（毫秒級）</td>
+          <td>較長（秒～分鐘）</td>
+        </tr>
+      </tbody>
+    </table>
+    <!--table end-->
 
     <script>
     function copyCode(button) {
