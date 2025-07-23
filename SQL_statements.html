@@ -399,11 +399,10 @@
   <h3>GTT</h3>
   <p>語法</p>
   <div class="code-block" id="sqlCode">
-      <button class="copy-button" onclick="copyCode(this)">複製</button>
-      <span class="code-content">
-        CREATE GLOBAL TEMPORARY TABLE temp_table (
-          id NUMBER,name VARCHAR2(100)
-        ) ON COMMIT PRESERVE ROWS;  </span></div>
+    <button class="copy-button" onclick="copyCode(this)">複製</button>
+    <span class="code-content">CREATE GLOBAL TEMPORARY TABLE temp_table (
+    id NUMBER,name VARCHAR2(100)
+  ) ON COMMIT PRESERVE ROWS;  </span></div>
   <p>解釋：<br>GTT 是 Oracle 的 <span class="under">暫存表（Temporary Table）</span>，會依據 session 或 transaction 的設定，在使用者斷線或交易結束後自動清空資料。<br>
   <span class="under">這在需要處理大量中間資料時非常有用，不會污染正式資料表。</span>一樣具有隱含 COMMIT特性。需注意COMMIT狀態，否則容易Lock住。</p>
   <p>選項：<br>- <code>ON COMMIT DELETE ROWS</code>: 每次 COMMIT 時清空資料（transaction 級）。<br>- <code>ON COMMIT PRESERVE ROWS</code>: 資料會保留到 session 結束（session 級）。</p>
@@ -472,13 +471,12 @@
   <p>語法(定義多個CTE)</p>
   <div class="code-block" id="sqlCode">
       <button class="copy-button" onclick="copyCode(this)">複製</button>
-      <span class="code-content">
-        WITH cte1 AS (
-            SELECT ...
-        ), cte2 AS (
-            SELECT ...
-        )
-        SELECT * FROM cte1 JOIN cte2 ON ...; </span></div>
+      <span class="code-content">WITH cte1 AS (
+      SELECT ...
+  ), cte2 AS (
+      SELECT ...
+  )
+  SELECT * FROM cte1 JOIN cte2 ON ...; </span></div>
   <p>特點</p>
   <table border="1" cellspacing="0" cellpadding="8">
   <thead>
