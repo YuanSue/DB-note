@@ -343,9 +343,9 @@
 </table>
 <!-- 表格結束 -->
 
-  <h2 id="section2">DQL_Data Query Language(資料查詢語言)</h2>
+  <h2 id="section2">DDL_Data Definition Language(資料定義語言)</h2>
     <p> 是用來定義或修改資料庫結構的一組 SQL 指令。<br>
-        當要<span class="under">建立、修改或刪除</span>資料表（table）、索引（index）、檢視表（view）等等這些 
+        當要<span class="under">建立、修改或刪除</span>資料表（table）、索引（index）、檢視表（view）等等這些
         <span class="under">資料庫物件的結構</span>時，就是在使用DDL。
     </p>
 <!-- 表格開始 -->
@@ -384,8 +384,133 @@
   <p> - DDL 通常會<span class="under">自動提交（auto-commit）</span>，執行後就無法用 <code>ROLLBACK</code> 還原。
       <br>- 修改的是「架構」，不是資料內容。
       <br>- 常用於建立初期資料庫設計、或變更資料結構需求時。 </p>
+  <h3>CTAS</h3>
+  <p>語法</p>
+  <div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+        CREATE TABLE new_table AS
+        SELECT * FROM table ;</span>
+  </div>
+  <p>解釋：<br>CTAS 是 <code>Create Table As Select</code>的縮寫，用來建立一個 新的表格，並且用 <code>SELECT</code> 查詢的結果來填充這個新表(定義一張新表)。
+    <span class="red-text">一旦執行，會隱式COMMIT（無法 rollback）。</span></p>
+  <p>特點：<br>- 建立表格的同時也會填入資料。<br>- 表的結構（欄位名、型別）來自查詢結果。<br>- 不會自動建立索引、主鍵等約束條件（需另行加上）。</p>
+
+  <h3>GTT</h3>
+  <p>語法</p>
+  <div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+        CREATE GLOBAL TEMPORARY TABLE temp_table (
+          id NUMBER,name VARCHAR2(100)
+        ) ON COMMIT PRESERVE ROWS;  </span></div>
+  <p>解釋：<br>GTT 是 Oracle 的 <span class="under">暫存表（Temporary Table）</span>，會依據 session 或 transaction 的設定，在使用者斷線或交易結束後自動清空資料。<br>
+  <span class="under">這在需要處理大量中間資料時非常有用，不會污染正式資料表。</span>一樣具有隱含 COMMIT特性。需注意COMMIT狀態，否則容易Lock住。</p>
+  <p>選項：<br>- <code>ON COMMIT DELETE ROWS</code>: 每次 COMMIT 時清空資料（transaction 級）。<br>- <code>ON COMMIT PRESERVE ROWS</code>: 資料會保留到 session 結束（session 級）。</p>
+  <p>選項：<br>- 表結構是永久存在的，但資料是暫時的。<br>- 每個 session 看不到其他 session 的暫存表資料。<br>- 通常用於存放中間運算結果。</p>
+  <p>NOTE: <br>1. 使用GTT時，最後要下'COMMIT;' 確保table有被釋放<br>2. 若被lock住，需要kill session(過程在Procedure頁中)<br>3. 為何沒使用卻被lock => session要維持ACID原則<br>4. CTAS跟GTT能相結合使用<br>5. 雖然資料是暫存的，但表的定義是由 DDL 指令建立的。<br>6. 它會在資料庫中建立一個暫存表的結構（結構永久存在）。</p>
+  <p><span class = "blue-text">各大資料庫對 GTT 的支援情況</span> </p>
+  <!-- 表格開始 -->
+  <table border="1" cellspacing="0" cellpadding="8">
+  <thead>
+    <tr>
+      <th>資料庫系統</th>
+      <th>是否支援 GTT</th>
+      <th>說明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Oracle</strong></td>
+      <td>✅ 支援完整 GTT</td>
+      <td>使用 <code>CREATE GLOBAL TEMPORARY TABLE</code>，資料會在 COMMIT 或 SESSION 結束時清除。</td>
+    </tr>
+    <tr>
+      <td><strong>PostgreSQL</strong></td>
+      <td>✅ 支援暫存表，但不叫 GTT</td>
+      <td>使用 <code>CREATE TEMP TABLE</code> 或 <code>CREATE TEMPORARY TABLE</code>，結構只對當前 session 存在，與 Oracle GTT 不完全一樣（PostgreSQL 的 temp table 是 <strong>local temporary table</strong>）。</td>
+    </tr>
+    <tr>
+      <td><strong>SQL Server</strong></td>
+      <td>✅ 支援暫存表（用法不同）</td>
+      <td>使用 <code>#temp</code>（local temporary）或 <code>##temp</code>（global temporary）。結構與 Oracle GTT 不同。也可使用 <code>CREATE TABLE #temp</code>。</td>
+    </tr>
+    <tr>
+      <td><strong>MySQL</strong></td>
+      <td>✅ 支援暫存表（local temporary）</td>
+      <td>使用 <code>CREATE TEMPORARY TABLE</code>，僅在 session 中有效。斷線會刪除表結構。與 Oracle GTT 不同。</td>
+    </tr>
+    <tr>
+      <td><strong>DB2</strong></td>
+      <td>✅ 支援 GTT（名稱一樣）</td>
+      <td>使用 <code>DECLARE GLOBAL TEMPORARY TABLE</code>，行為與 Oracle 類似。</td>
+    </tr>
+    <tr>
+      <td><strong>SQLite</strong></td>
+      <td>✅ 支援 TEMP TABLE</td>
+      <td>使用 <code>CREATE TEMP TABLE</code>，但功能簡化，不如 Oracle 靈活。</td>
+    </tr>
+    <tr>
+      <td><strong>Snowflake</strong></td>
+      <td>✅ 支援 TEMP TABLE</td>
+      <td>使用 <code>CREATE TEMPORARY TABLE</code>，資料僅在 session 中存在。</td>
+    </tr>
+    <tr>
+      <td><strong>BigQuery</strong></td>
+      <td>⚠️ 不支援 GTT</td>
+      <td>不支援臨時表，但可以用子查詢或 <code>WITH</code> 處理中間結果。</td>
+    </tr>
+  </tbody>
+</table>
+<!-- 表格結束 -->
 
   <h2 id="section3">DML_Data Manipulation Language(資料操作語言)</h2>
+  <h3>WITH 子句（CTE）</h3>
+  <p>CTE（Common Table Expression，通用表達式）是 SQL 中一種 <span class="under">命名的暫時結果集</span>，
+    你可以在主查詢中<span class="under">多次</span>使用它，就像<span class="under">使用一個暫時定義好的虛擬資料表</span>一樣。</p>
+
+  <p>語法(定義多個CTE)</p>
+  <div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+        WITH cte1 AS (
+            SELECT ...
+        ), cte2 AS (
+            SELECT ...
+        )
+        SELECT * FROM cte1 JOIN cte2 ON ...; </span></div>
+  <p>特點</p>
+  <table border="1" cellspacing="0" cellpadding="8">
+  <thead>
+    <tr>
+      <th>特性</th>
+      <th>說明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>✅ <strong>命名中間查詢</strong></td>
+      <td>讓複雜查詢可讀性更好</td>
+    </tr>
+    <tr>
+      <td>✅ <strong>可重複使用</strong></td>
+      <td>多次在主查詢中引用</td>
+    </tr>
+    <tr>
+      <td>✅ <strong>支援遞迴查詢</strong></td>
+      <td>適合處理階層資料（如組織樹）</td>
+    </tr>
+    <tr>
+      <td>❌ <strong>不會產生實體表</strong></td>
+      <td>執行完查詢後 CTE 就消失了</td>
+    </tr>
+    <tr>
+      <td>✅ <strong>僅限單次查詢中有效</strong></td>
+      <td>不可跨查詢使用</td>
+    </tr>
+  </tbody>
+</table>
+
   <h2 id="section4">DCL_Data Control Language(資料控制語言)</h2>
 
   <script>
